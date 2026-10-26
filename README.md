@@ -15,20 +15,20 @@ onde rodam; nada de produto ou stack fica aqui.
 
 ## Instalação
 
-Global (vale para todos os projetos da máquina):
-
-```bash
-npx skills add paulocesaaars/skills -g -a claude-code -a codex -a cursor --copy -y
-```
-
-Só no projeto atual (versionadas junto com o repositório):
+Na raiz do projeto. As skills são copiadas para `.claude/skills/` e
+`.agents/skills/` e versionadas com o repositório; o `skills-lock.json` gerado
+registra a origem e também deve ser commitado:
 
 ```bash
 npx skills add paulocesaaars/skills -a claude-code -a codex -a cursor --copy -y
 ```
 
+Para instalar para todos os projetos da máquina, sem versionar, acrescente `-g`.
+
 ## Atualização
 
+Na raiz do projeto (acrescente `-g` para a instalação global):
+
 ```bash
-npx skills update -g -y
+npx skills update -y
 ```
