@@ -9,6 +9,7 @@ formato `SKILL.md`.
 | [`revisao-codigo`](skills/revisao-codigo/SKILL.md) | Revisa código (duplicação, SOLID, arquitetura) e sugere melhorias sem implementar |
 | [`atualizar-documentacao`](skills/atualizar-documentacao/SKILL.md) | Sincroniza `PRD.md`, `TDD.md` e `README.md` com o que foi implementado |
 | [`gerar-release`](skills/gerar-release/SKILL.md) | Commita por assunto, sobe a versão, cria e envia a tag de release |
+| [`configurar-agentes`](skills/configurar-agentes/SKILL.md) | Cria ou atualiza o `AGENTS.md` e o `CLAUDE.md` do projeto a partir do [modelo padrão](skills/configurar-agentes/assets/AGENTS.template.md) |
 
 As skills leem `AGENTS.md`, `PRD.md` e `TDD.md` (ou equivalentes) do projeto
 onde rodam; nada de produto ou stack fica aqui.
