@@ -1,7 +1,7 @@
 # Skills
 
 Skills de agente reutilizáveis e independentes de projeto, em português (Brasil).
-Funcionam no Claude Code, Codex, Cursor e demais agentes compatíveis com o
+Funcionam no Claude Code, Cursor, Copilot e demais agentes compatíveis com o
 formato `SKILL.md`.
 
 | Skill | Uso |
