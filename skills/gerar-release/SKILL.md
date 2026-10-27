@@ -97,7 +97,7 @@ Regras:
   grupo e aplique com `git apply --cached /tmp/p.patch`. Se os hunks forem
   interdependentes, mantenha o arquivo no grupo dominante.
 - Cópias da mesma skill em pastas de ferramentas diferentes (`.claude/skills/X`,
-  `.agents/skills/X`) vão no mesmo commit.
+  `.agents/skills/X`, `.devin/skills/X`) vão no mesmo commit.
 - Não altere o arquivo de versão nos grupos se a única mudança for a versão —
   ela pertence ao commit de release (passo 8).
 - Ordem dos commits: dependências antes de dependentes (núcleo → adaptadores →

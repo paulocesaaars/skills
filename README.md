@@ -1,8 +1,8 @@
 # Skills
 
 Skills de agente reutilizáveis e independentes de projeto, em português (Brasil).
-Funcionam no Claude Code, Cursor, Copilot e demais agentes compatíveis com o
-formato `SKILL.md`.
+Funcionam no Claude Code, Cursor, Copilot, Devin Desktop e demais agentes
+compatíveis com o formato `SKILL.md`.
 
 | Skill | Uso |
 |-------|-----|
@@ -16,12 +16,13 @@ onde rodam; nada de produto ou stack fica aqui.
 
 ## Instalação
 
-Na raiz do projeto. As skills são copiadas para `.claude/skills/` e
-`.agents/skills/` e versionadas com o repositório; o `skills-lock.json` gerado
-registra a origem e também deve ser commitado:
+Na raiz do projeto. As skills são copiadas para `.claude/skills/`,
+`.agents/skills/` e `.devin/skills/` e versionadas com o repositório; o
+`skills-lock.json` gerado registra a origem e também deve ser commitado. O
+Devin Desktop lê as skills do projeto em `.devin/skills/`.
 
 ```bash
-npx skills add paulocesaaars/skills -a claude-code -a cursor -a github-copilot --copy -y
+npx skills add paulocesaaars/skills -a claude-code -a cursor -a github-copilot -a devin --copy -y
 ```
 
 Para instalar para todos os projetos da máquina, sem versionar, acrescente `-g`.
