@@ -21,7 +21,7 @@ Na raiz do projeto. As skills são copiadas para `.claude/skills/` e
 registra a origem e também deve ser commitado:
 
 ```bash
-npx skills add paulocesaaars/skills -a claude-code -a codex -a cursor --copy -y
+npx skills add paulocesaaars/skills -a claude-code -a cursor -a github-copilot --copy -y
 ```
 
 Para instalar para todos os projetos da máquina, sem versionar, acrescente `-g`.
