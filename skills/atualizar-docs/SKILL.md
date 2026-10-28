@@ -1,5 +1,5 @@
 ---
-name: atualizar-documentacao
+name: atualizar-docs
 description: >-
   Atualiza PRD.md, TDD.md e README.md com tudo que foi implementado desde a
   última revisão desses documentos, comparando o código atual com o que está
@@ -22,7 +22,7 @@ Cada fato mora em **um** documento; os outros apontam para ele.
 
 | Documento | Conteúdo | Não deve conter |
 |-----------|----------|-----------------|
-| `PRD.md` | O quê e por quê: requisitos (RF), histórias e critérios de aceite, regras de negócio, roadmap, riscos, fora de escopo | Nomes de módulos, detalhes de implementação |
+| `PRD.md` | O quê e por quê: requisitos (RF), histórias (os critérios de aceite ficam no `BDD.md` e em `bdd/`, quando o projeto usa BDD), regras de negócio, roadmap, riscos, fora de escopo | Nomes de módulos, detalhes de implementação |
 | `TDD.md` | Como: stack, componentes, estrutura de pastas, modelo de dados, pipelines, interfaces, configuração, segurança, desempenho, decisões | Justificativa de produto, passo a passo de uso |
 | `README.md` | Uso: instalação, primeiros passos, comandos, interfaces expostas, configuração, publicação | Arquitetura interna, requisitos formais |
 
@@ -44,8 +44,8 @@ Progresso:
 
 ### 1. Definir a base
 
-A base fica gravada em `.agents/last-reviewed-commit`
-(uma linha com o hash completo). Ordem de escolha:
+A base fica gravada no marcador `.agents/last-reviewed-commit` (uma linha com
+o hash completo; o `HARNESS.md` pode indicar outro caminho). Ordem de escolha:
 
 1. Commit, tag ou data indicados pelo usuário.
 2. O hash do marcador, se existir e for ancestral de `HEAD`. Um hash que não é
@@ -98,11 +98,11 @@ Classifique cada mudança relevante:
 ### 3. Confrontar com os documentos
 
 Para cada mudança, decida o documento dono (tabela acima) e procure o trecho
-afetado com `rg`. Pontos que costumam ficar defasados:
+afetado com `rg` ou `git grep`. Pontos que costumam ficar defasados:
 
 - **PRD.md**: cabeçalho (status, data, versão), tabela de requisitos (inclusive
-  prioridade e se já está entregue), histórias e critérios de aceite, regras de
-  negócio, roadmap (mover itens de "Próximo" para "Entregue"; contagens de
+  prioridade e se já está entregue), histórias (critérios de aceite só se o
+  projeto não usa BDD), regras de negócio, roadmap (mover itens de "Próximo" para "Entregue"; contagens de
   capacidades), riscos.
 - **TDD.md**: stack e versões de dependências, árvore da estrutura do projeto,
   componentes, modelo de dados, pipelines, interfaces, exemplos de
@@ -112,6 +112,10 @@ afetado com `rg`. Pontos que costumam ficar defasados:
 
 Valide também o inverso: algo documentado que **não existe mais** no código deve
 ser removido ou corrigido.
+
+Se o projeto usa BDD (`BDD.md` e `bdd/`), não copie critérios de aceite para os
+documentos. Se uma mudança altera comportamento sem cenário correspondente,
+registre em **Pendências** e sugira o cenário; não grave em `bdd/`.
 
 ### 4. Editar
 

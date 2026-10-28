@@ -1,5 +1,5 @@
 ---
-name: revisao-codigo
+name: revisar-codigo
 description: >-
   Revisa código já implementado procurando duplicação, violações de SOLID e
   desvios da arquitetura e das regras do AGENTS.md e da documentação técnica do
@@ -70,7 +70,17 @@ Analise sempre estes eixos:
    - Sem segredos commitados; nada de chaves em logs ou exceções.
    - Configuração lida pelo objeto validado do projeto, sem leitura de ambiente
      espalhada pelo código.
-   - Tipos nas funções públicas; mensagens de erro com ação corretiva.
+   - Tipos nas funções públicas (em linguagem tipada); mensagens de erro com
+     ação corretiva.
+
+5. **Cobertura do BDD** (só se o projeto usa BDD: existe `BDD.md`)
+   - Todo cenário de `bdd/` (índice em `BDD.md`) sem `@manual` tem um teste com o mesmo ID
+     (a marcação do projeto, por exemplo `@pytest.mark.bdd("US-03.2")`). Use
+     o verificador do projeto, se houver (procure em scripts, Makefile,
+     manifesto ou CI).
+   - Teste que aponta para um ID inexistente em `bdd/`.
+   - Teste que não verifica o "Então" do cenário que diz cobrir.
+   - Comportamento novo no escopo da revisão sem cenário em `bdd/`.
 
 ## Como conduzir a revisão
 
@@ -94,7 +104,8 @@ Analise sempre estes eixos:
   fora do ponto único definido na documentação técnica.
 - 🟡 **Médio**: duplicação localizada, responsabilidade misturada de baixo
   impacto, acoplamento evitável, divergência de convenção do AGENTS.md, ausência
-  de tipos em API pública, mensagem de erro sem ação corretiva.
+  de tipos em API pública, mensagem de erro sem ação corretiva, cenário do
+  `bdd/` sem teste.
 - 🟢 **Baixo**: legibilidade, nomes, pequenas repetições, melhorias opcionais.
 
 ## Formato do relatório
