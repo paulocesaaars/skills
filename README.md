@@ -12,6 +12,7 @@ etapa termina com uma aprovação sua.
 |-------|-----|
 | [`iniciar-projeto`](skills/iniciar-projeto/SKILL.md) | Instala o `AGENTS.md` (a partir do [modelo padrão](skills/iniciar-projeto/assets/AGENTS.template.md)) e o `CLAUDE.md`, cria os documentos de referência vazios e confere o CLI do host, o Context7 e o Octocode |
 | [`especificar-feature`](skills/especificar-feature/SKILL.md) | Entrevista você e escreve a especificação da funcionalidade, com os cenários BDD sugeridos. Não implementa |
+| [`criar-testes`](skills/criar-testes/SKILL.md) | Cria os testes que faltam para os cenários de `bdd/` sem `@manual`, com o mesmo ID. Não altera cenário nem teste já existente |
 | [`revisar-codigo`](skills/revisar-codigo/SKILL.md) | Revisa o código (duplicação, SOLID, arquitetura, cobertura dos cenários) e sugere melhorias sem implementar |
 | [`atualizar-docs`](skills/atualizar-docs/SKILL.md) | Sincroniza `PRD.md`, `TDD.md` e `README.md` com o que foi implementado |
 | [`commitar`](skills/commitar/SKILL.md) | Roda os testes, commita por assunto, sobe a versão e envia a branch, com a opção de abrir o pull request. Sem tag nem release |
@@ -36,8 +37,8 @@ produto ou stack fica aqui. O que o projeto não tem simplesmente não se aplica
 ## Fluxo de SDD
 
 ```
-iniciar-projeto → especificar-feature → plano → implementar → revisar-codigo
-                → atualizar-docs → commitar → (gerar-guardrails) → publicar-release
+iniciar-projeto → especificar-feature → plano → implementar → criar-testes
+                → revisar-codigo → atualizar-docs → commitar → (gerar-guardrails) → publicar-release
 ```
 
 ### Como executar uma skill
@@ -54,18 +55,20 @@ escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
 | 1 | **Especificar** | `/especificar-feature <o que você quer>` | Especificação: objetivo, escopo, requisitos, regras, decisões e **cenários BDD sugeridos** | As decisões críticas e a gravação dos cenários em `bdd/` |
 | 2 | **Planejar** | Peça o plano ao fim da skill; o agente entra no **modo de planejamento** dele (não é uma skill) | Plano de implementação a partir da especificação | O plano |
 | 3 | **Implementar** | Peça ao agente para implementar o plano aprovado | Código e **um teste por cenário** de `bdd/`, com o mesmo ID. Os cenários `@manual` viram checklist | — |
-| 4 | **Revisar** | `/revisar-codigo` (indique o escopo: arquivo, pasta ou "o que mudou") | Relatório por criticidade, incluindo cenários sem teste. Não edita nada | Quais sugestões aplicar |
-| 5 | **Atualizar a documentação** | `/atualizar-docs` | `PRD.md`, `TDD.md` e `README.md` alinhados ao código; cenários sem cobertura aparecem em "Pendências" | O texto alterado |
-| 6 | **Commitar** | `/commitar` | Testes rodando, commits por assunto, versão subida em um commit próprio, branch enviada e, se quiser, PR aberto | O plano de commits |
-| 7 | **Proteger a branch** (uma vez) | `/gerar-guardrails` | CI de pull request, portão de testes na release e regra que bloqueia o merge sem o CI verde | O plano e a criação da regra |
-| 8 | **Publicar** | `/publicar-release` | Tag `vX.Y.Z` criada e enviada, que dispara o pipeline de release. Só roda com o working tree limpo; havendo pendência, manda rodar o `/commitar` | O plano da release e o checklist dos cenários `@manual` |
+| 4 | **Criar os testes que faltam** | `/criar-testes` | Um teste novo por cenário de `bdd/` ainda sem teste. Os `@manual` continuam checklist | A lista de testes antes de gravar |
+| 5 | **Revisar** | `/revisar-codigo` (indique o escopo: arquivo, pasta ou "o que mudou") | Relatório por criticidade, incluindo cenários sem teste. Não edita nada | Quais sugestões aplicar |
+| 6 | **Atualizar a documentação** | `/atualizar-docs` | `PRD.md`, `TDD.md` e `README.md` alinhados ao código; cenários sem cobertura aparecem em "Pendências" | O texto alterado |
+| 7 | **Commitar** | `/commitar` | Testes rodando, commits por assunto, versão subida em um commit próprio, branch enviada e, se quiser, PR aberto | O plano de commits |
+| 8 | **Proteger a branch** (uma vez) | `/gerar-guardrails` | CI de pull request, portão de testes na release e regra que bloqueia o merge sem o CI verde | O plano e a criação da regra |
+| 9 | **Publicar** | `/publicar-release` | Tag `vX.Y.Z` criada e enviada, que dispara o pipeline de release. Só roda com o working tree limpo; havendo pendência, manda rodar o `/commitar` | O plano da release e o checklist dos cenários `@manual` |
 
 ### Regras do fluxo
 
 - **Especificação primeiro.** Nenhuma funcionalidade vai ao código sem
   especificação e plano aprovados.
 - **Um teste por cenário.** Todo cenário de `bdd/` sem `@manual` tem um teste
-  com o mesmo ID; o `revisar-codigo` aponta o que faltar.
+  com o mesmo ID. O `criar-testes` escreve os que faltam; o `revisar-codigo`
+  aponta o que ainda falhar.
 - **O cenário não muda para o teste passar.** Alterar o comportamento esperado
   exige a sua aprovação.
 - **Versão da release como fonte da verdade.** O `commitar` sobe a versão; o
