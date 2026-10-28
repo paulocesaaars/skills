@@ -10,6 +10,7 @@ etapa termina com uma aprovação sua.
 
 | Skill | Uso |
 |-------|-----|
+| [`implementar-sdd`](skills/implementar-sdd/SKILL.md) | Conduz uma funcionalidade pelo fluxo inteiro, da especificação à documentação commitada, com a opção de publicar a release no fim |
 | [`iniciar-projeto`](skills/iniciar-projeto/SKILL.md) | Instala o `AGENTS.md` (a partir do [modelo padrão](skills/iniciar-projeto/assets/AGENTS.template.md)) e o `CLAUDE.md`, cria os documentos de referência vazios e confere o CLI do host, o Context7 e o Octocode |
 | [`especificar-feature`](skills/especificar-feature/SKILL.md) | Entrevista você e escreve a especificação da funcionalidade, com os cenários BDD sugeridos. Não implementa |
 | [`criar-testes`](skills/criar-testes/SKILL.md) | Cria os testes que faltam para os cenários de `bdd/` sem `@manual`, com o mesmo ID. Não altera cenário nem teste já existente |
@@ -18,6 +19,7 @@ etapa termina com uma aprovação sua.
 | [`commitar`](skills/commitar/SKILL.md) | Roda os testes, commita por assunto, sobe a versão e envia a branch, com a opção de abrir o pull request. Sem tag nem release |
 | [`gerar-guardrails`](skills/gerar-guardrails/SKILL.md) | Gera o CI do pull request e a regra da branch que exige o CI verde (GitHub) |
 | [`publicar-release`](skills/publicar-release/SKILL.md) | Confere que não há pendências de commit, cria e envia a tag de release. Não commita |
+| [`gerar-skill`](skills/gerar-skill/SKILL.md) | Cria uma skill abstrata e reutilizável, independente do projeto e das tecnologias. Não implementa |
 
 As skills leem o `AGENTS.md` do projeto e os documentos de referência dele
 (`PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e `bdd/`, `HARNESS.md`, ou equivalentes); nada de
@@ -36,6 +38,18 @@ produto ou stack fica aqui. O que o projeto não tem simplesmente não se aplica
 
 ## Fluxo de SDD
 
+Pedir para desenvolver ou implementar uma funcionalidade dispara
+[`implementar-sdd`](skills/implementar-sdd/SKILL.md). Ela lê cada skill da etapa e
+para nas aprovações. A ordem dela commita o código antes da documentação:
+
+```
+implementar-sdd: especificar-feature → plano → implementar → criar-testes
+               → revisar-codigo → commitar → atualizar-docs
+               → commitar a documentação | publicar-release
+```
+
+O passo a passo abaixo continua valendo para rodar uma etapa sozinha. `iniciar-projeto` e `gerar-guardrails` ficam de fora do atalho: são feitos uma vez.
+
 ```
 iniciar-projeto → especificar-feature → plano → implementar → criar-testes
                 → revisar-codigo → atualizar-docs → commitar → (gerar-guardrails) → publicar-release
@@ -46,6 +60,8 @@ iniciar-projeto → especificar-feature → plano → implementar → criar-test
 Peça pelo nome. Onde o agente aceita comando de skill, use `/nome-da-skill`
 (por exemplo `/especificar-feature`). Em qualquer agente, também funciona
 escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
+`implementar-sdd` também começa sozinha quando o pedido é desenvolver ou
+implementar uma funcionalidade.
 
 ### Passo a passo
 
@@ -80,13 +96,13 @@ escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
 
 ## Instalação
 
-Na raiz do projeto. As skills são copiadas para `.claude/skills/`,
-`.agents/skills/` e `.devin/skills/` e versionadas com o repositório; o
-`skills-lock.json` gerado registra a origem e também deve ser commitado. O
-Devin Desktop lê as skills do projeto em `.devin/skills/`.
+Na raiz do projeto. As skills são copiadas para `.claude/skills/` e
+`.agents/skills/` e versionadas com o repositório; o `skills-lock.json`
+gerado registra a origem e também deve ser commitado. O Devin lê as skills
+do projeto em `.agents/skills/`.
 
 ```bash
-npx skills add paulocesaaars/skills -a claude-code -a cursor -a github-copilot -a devin --copy -y
+npx skills add paulocesaaars/skills -a claude-code -a cursor -a github-copilot --copy -y
 ```
 
 Para instalar para todos os projetos da máquina, sem versionar, acrescente `-g`.
