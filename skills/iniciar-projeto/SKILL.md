@@ -14,7 +14,8 @@ description: >-
 
 Inicia o projeto instalando as instruções de agente padronizadas. Explicações ao usuário
 em **português (Brasil)**. Edita **apenas** `AGENTS.md`, `CLAUDE.md` e `HARNESS.md` e cria, se faltarem, os
-documentos de referência (`PRD.md`, `TDD.md`, `BDD.md` e a pasta `bdd/`), todos
+documentos de referência (`PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e a pasta
+`bdd/`), todos
 na raiz do repositório. Também confere e, com a confirmação do usuário, instala
 as ferramentas de apoio da máquina (passo 6).
 
@@ -88,8 +89,8 @@ mantê-las no `AGENTS.md`, e só mova com a confirmação do usuário.
 
 ### 5. Documentos de referência
 
-O modelo aponta para `PRD.md` (produto), `TDD.md` (técnico) e `BDD.md`
-(índice dos casos de uso; os critérios de aceite em Gherkin ficam na pasta
+O modelo aponta para `PRD.md` (produto), `TDD.md` (técnico), `DESIGN.md`
+(estilo visual) e `BDD.md` (índice dos casos de uso; os critérios de aceite em Gherkin ficam na pasta
 `bdd/`, um arquivo por caso de uso), aceitando nomes equivalentes.
 
 | Situação | Ação |
@@ -190,7 +191,7 @@ sem ela. Não insista nem tente alternativas arriscadas.
 - **AGENTS.md:** <criado | já atualizado | substituído | mesclado | mantido>
 - **CLAUDE.md:** <criado | já importava o AGENTS.md | importação adicionada>
 - **HARNESS.md:** <criado vazio | já existia, mantido>
-- **PRD.md / TDD.md / BDD.md e bdd/:** <criados vazios | já existiam, mantidos>
+- **PRD.md / TDD.md / DESIGN.md / BDD.md e bdd/:** <criados vazios | já existiam, mantidos>
 - **CLI do host (`gh`):** <ok e autenticado | instalado agora | instalado, falta `gh auth login` | ausente: sugerido>
 - **Context7:** <ok | instalado agora (reinicie o agente) | ausente: sugerido>
 - **Octocode:** <ok | instalado agora (reinicie o agente) | ausente: sugerido>

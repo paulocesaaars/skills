@@ -19,6 +19,7 @@ documentos que existirem; o que o projeto não tem não se aplica.
 |-------------|-----------|
 | Escopo, funcionalidades, regras de negócio, roadmap | [`PRD.md`](PRD.md) |
 | Arquitetura, componentes, dependências, configuração, segurança | [`TDD.md`](TDD.md) |
+| Estilo visual: cores, tipografia, espaçamento, raios, elevação, componentes, layout | [`DESIGN.md`](DESIGN.md) |
 | Regras específicas deste projeto, que complementam este arquivo | [`HARNESS.md`](HARNESS.md) |
 | Critérios de aceite em Gherkin (se o projeto usa BDD), cada cenário com um teste de mesmo ID | [`BDD.md`](BDD.md) (índice) e [`bdd/`](bdd) |
 
@@ -77,6 +78,24 @@ prevalece sobre qualquer outra deste documento.
    camadas, dependências ou configuração.
 3. Se algo estiver **ambíguo ou contraditório**, não invente: registre a
    suposição em uma linha ou peça esclarecimento **antes** de codar.
+4. Leia [`DESIGN.md`](DESIGN.md) quando a tarefa envolver interface, layout ou
+   aparência.
+
+### Estilo visual
+
+Interface, layout e aparência seguem [`DESIGN.md`](DESIGN.md). Esta regra vale
+para qualquer alteração visível ao usuário.
+
+- Use os tokens e componentes definidos lá: cores, tipografia, espaçamento,
+  raios, elevação, componentes e comportamento responsivo.
+- Cor, tipo, raio, sombra, espaçamento ou componente ficam dentro do documento.
+- Se a alteração **não seguir** o estilo do `DESIGN.md`, pare e peça permissão
+  **antes** de implementar. Descreva o desvio e aguarde autorização explícita.
+  Sem essa autorização, mantenha o estilo do documento.
+- Pedido direto de implementação **não** autoriza o desvio. A permissão para
+  sair do `DESIGN.md` é separada e vem antes da alteração.
+- Se o `DESIGN.md` estiver vazio, o projeto ainda não definiu um estilo: peça
+  orientação ao usuário antes de escolher cores e tipografia.
 
 ### Critérios de aceite (BDD)
 
