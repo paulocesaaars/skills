@@ -19,7 +19,7 @@ etapa termina com uma aprovação sua.
 | [`publicar-release`](skills/publicar-release/SKILL.md) | Commita por assunto, sobe a versão, cria e envia a tag de release |
 
 As skills leem o `AGENTS.md` do projeto e os documentos de referência dele
-(`PRD.md`, `TDD.md`, `BDD.md` e `bdd/`, `HARNESS.md`, ou equivalentes); nada de
+(`PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e `bdd/`, `HARNESS.md`, ou equivalentes); nada de
 produto ou stack fica aqui. O que o projeto não tem simplesmente não se aplica.
 
 ## Documentos do projeto
@@ -30,6 +30,7 @@ produto ou stack fica aqui. O que o projeto não tem simplesmente não se aplica
 | `HARNESS.md` | Regras só deste projeto. Importado pelo `AGENTS.md`; em conflito, vale ele |
 | `PRD.md` | O quê e por quê: escopo, requisitos, histórias, regras de negócio |
 | `TDD.md` | Como: arquitetura, stack, interfaces, configuração |
+| `DESIGN.md` | Estilo visual: cores, tipografia, espaçamento, componentes. A regra de segui-lo vale em todo projeto; o arquivo nasce vazio |
 | `BDD.md` e `bdd/` | Critérios de aceite em Gherkin: o índice dos casos de uso e um arquivo por caso |
 
 ## Fluxo de SDD
@@ -49,7 +50,7 @@ escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
 
 | # | Etapa | Como executar | Resultado | Você aprova |
 |---|-------|---------------|-----------|-------------|
-| 0 | **Iniciar o projeto** (uma vez) | `/iniciar-projeto` na raiz do repositório | `AGENTS.md`, `CLAUDE.md`, `HARNESS.md`, `PRD.md`, `TDD.md`, `BDD.md` e `bdd/` criados (vazios, se não existiam); GitHub CLI, Context7 e Octocode conferidos | A substituição de um `AGENTS.md` existente, a instalação de ferramentas |
+| 0 | **Iniciar o projeto** (uma vez) | `/iniciar-projeto` na raiz do repositório | `AGENTS.md`, `CLAUDE.md`, `HARNESS.md`, `PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e `bdd/` criados (vazios, se não existiam); GitHub CLI, Context7 e Octocode conferidos | A substituição de um `AGENTS.md` existente, a instalação de ferramentas |
 | 1 | **Especificar** | `/especificar-feature <o que você quer>` | Especificação: objetivo, escopo, requisitos, regras, decisões e **cenários BDD sugeridos** | As decisões críticas e a gravação dos cenários em `bdd/` |
 | 2 | **Planejar** | Peça o plano ao fim da skill; o agente entra no **modo de planejamento** dele (não é uma skill) | Plano de implementação a partir da especificação | O plano |
 | 3 | **Implementar** | Peça ao agente para implementar o plano aprovado | Código e **um teste por cenário** de `bdd/`, com o mesmo ID. Os cenários `@manual` viram checklist | — |

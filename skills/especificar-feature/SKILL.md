@@ -60,7 +60,7 @@ Leia o `AGENTS.md` e o que for relevante ao pedido:
 | `PRD.md` | Sempre: escopo, regras de negócio, roadmap |
 | `HARNESS.md` | Sempre, se existir: regras do projeto que prevalecem sobre o `AGENTS.md` |
 | `TDD.md` | Arquitetura, camadas, dependências, configuração, segurança |
-| `DESIGN.md` (se existir) | Qualquer parte visível ao usuário |
+| `DESIGN.md` (vazio = sem estilo definido) | Qualquer parte visível ao usuário |
 
 Leia também o código que a funcionalidade toca, para ancorar a especificação
 no que já existe. Se a funcionalidade já existir ou contradizer o `PRD.md`,
