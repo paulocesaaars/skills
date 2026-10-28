@@ -16,7 +16,7 @@ etapa termina com uma aprovação sua.
 | [`atualizar-docs`](skills/atualizar-docs/SKILL.md) | Sincroniza `PRD.md`, `TDD.md` e `README.md` com o que foi implementado |
 | [`commitar`](skills/commitar/SKILL.md) | Roda os testes, commita por assunto, sobe a versão e envia a branch, com a opção de abrir o pull request. Sem tag nem release |
 | [`gerar-guardrails`](skills/gerar-guardrails/SKILL.md) | Gera o CI do pull request e a regra da branch que exige o CI verde (GitHub) |
-| [`publicar-release`](skills/publicar-release/SKILL.md) | Commita por assunto, sobe a versão, cria e envia a tag de release |
+| [`publicar-release`](skills/publicar-release/SKILL.md) | Confere que não há pendências de commit, cria e envia a tag de release. Não commita |
 
 As skills leem o `AGENTS.md` do projeto e os documentos de referência dele
 (`PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e `bdd/`, `HARNESS.md`, ou equivalentes); nada de
@@ -58,7 +58,7 @@ escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
 | 5 | **Atualizar a documentação** | `/atualizar-docs` | `PRD.md`, `TDD.md` e `README.md` alinhados ao código; cenários sem cobertura aparecem em "Pendências" | O texto alterado |
 | 6 | **Commitar** | `/commitar` | Testes rodando, commits por assunto, versão subida em um commit próprio, branch enviada e, se quiser, PR aberto | O plano de commits |
 | 7 | **Proteger a branch** (uma vez) | `/gerar-guardrails` | CI de pull request, portão de testes na release e regra que bloqueia o merge sem o CI verde | O plano e a criação da regra |
-| 8 | **Publicar** | `/publicar-release` | Tag `vX.Y.Z` criada e enviada, que dispara o pipeline de release | O plano da release e o checklist dos cenários `@manual` |
+| 8 | **Publicar** | `/publicar-release` | Tag `vX.Y.Z` criada e enviada, que dispara o pipeline de release. Só roda com o working tree limpo; havendo pendência, manda rodar o `/commitar` | O plano da release e o checklist dos cenários `@manual` |
 
 ### Regras do fluxo
 
@@ -69,7 +69,8 @@ escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
 - **O cenário não muda para o teste passar.** Alterar o comportamento esperado
   exige a sua aprovação.
 - **Versão da release como fonte da verdade.** O `commitar` sobe a versão; o
-  `publicar-release` reaproveita essa versão e cria a tag.
+  `publicar-release` lê essa versão, cria a tag e **não publica** se houver
+  mudanças pendentes de commit.
 - **Host de código.** O GitHub é o caminho completo (`gh`). Em GitLab, Azure
   DevOps e afins, as skills usam o CLI do host quando existe, ou entregam os
   passos manuais; a `gerar-guardrails` só gera arquivos para o GitHub.
@@ -106,4 +107,4 @@ comando de instalação acima e apague as pastas antigas.
 | `configurar-agentes` | `iniciar-projeto` |
 | `revisao-codigo` | `revisar-codigo` |
 | `atualizar-documentacao` | `atualizar-docs` |
-| `gerar-release` | `publicar-release` (o commit por assunto agora também está no `commitar`) |
+| `gerar-release` | `publicar-release` (só cria a tag; o commit por assunto e a versão ficam no `commitar`) |
