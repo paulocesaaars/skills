@@ -8,7 +8,7 @@ description: >-
   Descobre a stack e os comandos de teste, lint e tipos do repositório. Use
   quando o usuário pedir guardrails, proteção da main, CI de pull request,
   exigir teste verde para merge ou release, ou garantir que os testes sempre
-  passem.
+  passem. Roda uma vez. Sem suíte de testes, avisa e não gera nada.
 ---
 
 # Gerar Guardrails
@@ -68,6 +68,12 @@ Progresso:
 | Sistemas operacionais | Onde o produto roda (instaladores, caminhos, binários por plataforma). Se roda em mais de um, pergunte se o CI deve testar neles |
 | Workflow de release | Arquivo em `.github/workflows/` disparado por `push` de tags |
 
+**Sem testes, não há guardrail.** Antes do resto, procure comando de teste
+(CI, Makefile, manifesto ou script) e arquivo de teste. Se não houver nenhum,
+alerte que o projeto não possui testes, que não foi possível validar o
+funcionamento e que esta skill depende de uma suíte. Encerre. Não gere
+workflow nem regra.
+
 Condições para seguir:
 
 - `viewerPermission` precisa ser `ADMIN` para criar a regra da branch. Sem isso,
@@ -87,6 +93,7 @@ gh api repos/{owner}/{repo}/branches/<principal>/protection   # 404 = sem prote�
 
 | Situação | Ação |
 |----------|------|
+| Já existe CI de pull request que roda os testes e a branch já exige esse CI verde | Os guardrails já foram gerados. Diga isso e encerre. Esta skill roda uma vez |
 | Já existe CI de pull request | Não crie outro. Mostre o que falta (testes? tipos? cobertura?) e proponha só o acréscimo |
 | Já existe ruleset ou proteção clássica na branch | Mostre as regras e pergunte se quer **acrescentar** a exigência do CI ou deixar como está |
 | Nada | Siga o fluxo completo |

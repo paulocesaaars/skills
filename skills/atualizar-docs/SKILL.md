@@ -3,15 +3,17 @@ name: atualizar-docs
 description: >-
   Atualiza PRD.md, TDD.md e README.md com tudo que foi implementado desde a
   última revisão desses documentos, comparando o código atual com o que está
-  documentado. Use quando o usuário pedir para atualizar, sincronizar ou revisar
-  a documentação, o PRD, o TDD ou o README após mudanças no código.
+  documentado. No início, pergunta se no final o usuário quer commitar ou
+  publicar a release. Use quando o usuário pedir para atualizar, sincronizar ou
+  revisar a documentação, o PRD, o TDD ou o README após mudanças no código.
 ---
 
 # Atualizar Documentação
 
 Mantém `PRD.md`, `TDD.md` e `README.md` fiéis ao código. Edita **apenas** esses
 três arquivos e o marcador `last-reviewed-commit` — nunca código, testes ou
-configuração. Todo o texto escrito é em **português (Brasil)**.
+configuração. A etapa 8 é a exceção: se o usuário pediu, segue `commitar`
+ou `publicar-release`. Todo o texto escrito é em **português (Brasil)**.
 
 Se o repositório usar outros nomes para os documentos de produto, técnico e de
 uso, aplique o fluxo a eles.
@@ -33,6 +35,7 @@ desatualizado em vez de acrescentar "agora também faz X".
 
 ```
 Progresso:
+- [ ] 0. Perguntar se commita ou publica no final
 - [ ] 1. Definir a base da última revisão
 - [ ] 2. Levantar o que mudou no código
 - [ ] 3. Confrontar mudanças com cada documento
@@ -40,7 +43,22 @@ Progresso:
 - [ ] 5. Verificar consistência
 - [ ] 6. Gravar a base revisada
 - [ ] 7. Relatar
+- [ ] 8. Commitar ou publicar, se o usuário pediu
 ```
+
+### 0. Perguntar se commita ou publica no final
+
+Antes de qualquer outra ação, pergunte o que fazer depois da documentação.
+Esta skill faz parte do deploy, depois dos guardrails quando eles existirem:
+
+- **Commitar no final** com a skill `commitar`
+- **Publicar a release no final** com a skill `publicar-release`
+- **Não commitar nem publicar**
+
+Guarde a resposta. Não commite no meio do fluxo.
+
+Se esta skill estiver rodando como etapa de outra que já commita no fim,
+não pergunte e não commite.
 
 ### 1. Definir a base
 
@@ -168,3 +186,20 @@ documentadas e siga em frente.
 ```
 
 Omita "Pendências" se não houver nenhuma.
+
+### 8. Commitar ou publicar, se o usuário pediu
+
+Localize a skill pelo nome nas pastas do repositório (`.claude/skills`,
+`.agents/skills`) e, se faltar, nas globais. Leia o `SKILL.md` e siga-o.
+Não reinterprete as regras dela.
+
+**Commitar.** Siga `commitar`. Pule o passo em que ela oferece atualizar a
+documentação: ela acabou de ser feita. Siga o restante, inclusive a oferta
+de pull request.
+
+**Publicar a release.** A release só sai com a árvore limpa. Se esta skill
+alterou arquivos, commite só esses arquivos pelos passos 3 a 8 de `commitar`,
+sem subir a versão de novo e sem oferecer de novo a documentação. Depois siga
+`publicar-release` por inteiro.
+
+**Não commitar nem publicar.** Encerre depois do relatório.

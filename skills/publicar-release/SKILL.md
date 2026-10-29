@@ -4,7 +4,9 @@ description: >-
   Publica uma release do projeto: confere que não há mudanças pendentes de
   commit, que a versão do manifesto é nova e que as checagens passam, cria a tag
   vX.Y.Z e a envia ao remoto para disparar o pipeline de publicação. Não faz
-  commit nem sobe a versão: isso é da skill de commits. Use quando o usuário
+  commit nem sobe a versão: isso é da skill de commits. No início, roda os
+  testes. Sem suíte, avisa que não foi possível validar o funcionamento e
+  segue. Use quando o usuário
   pedir para gerar, criar, cortar ou publicar uma release, versão ou tag.
 ---
 
@@ -53,6 +55,15 @@ Progresso:
 
 ### 2. Pré-checagens
 
+A primeira ação é rodar os testes. Descubra o comando (CI, Makefile, manifesto
+ou script) e execute-o.
+
+- Suíte passando: siga.
+- Suíte falhando: mostre os erros e pare. Release não sai com teste quebrado.
+- Projeto sem testes (nenhum comando, nenhum arquivo de teste, ou o runner
+  não coletou nenhum): alerte que o projeto não possui testes e que não foi
+  possível validar o funcionamento. Não pare por isso.
+
 ```bash
 git branch --show-current
 git fetch origin --tags
@@ -78,9 +89,8 @@ Demais verificações:
 - Atrás do remoto, com merge/rebase em andamento ou conflito: pare e informe a
   ação corretiva. Não faça `pull`, `rebase` nem `reset` por conta própria.
 - Rode localmente as checagens que o pipeline de release roda antes de compilar
-  (lint, tipos, validações) e os testes do projeto (ex.: `pytest`). Se falharem,
-  mostre os erros e pare — release não sai com checagem ou teste quebrado.
-  "Nenhum teste coletado" não é falha.
+  (lint, tipos, validações). Se falharem, mostre os erros e pare — release não
+  sai com checagem quebrada.
 - Se existir `BDD.md` (índice) com a pasta `bdd/`, rode o verificador de
   cobertura do projeto (procure em scripts, Makefile, manifesto ou CI). ID
   inexistente para a release. Mostre ao usuário os cenários sem teste e o

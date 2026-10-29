@@ -10,15 +10,16 @@ etapa termina com uma aprovação sua.
 
 | Skill | Uso |
 |-------|-----|
-| [`implementar-sdd`](skills/implementar-sdd/SKILL.md) | Conduz uma funcionalidade pelo fluxo inteiro, da especificação à documentação commitada, com a opção de publicar a release no fim |
+| [`implementar-sdd`](skills/implementar-sdd/SKILL.md) | Especifica, planeja e implementa uma funcionalidade. Depois pergunta se gera os testes do BDD, se revisa e se commita. Não faz o deploy. No início, roda os testes; sem suíte, avisa e segue; se falharem, pergunta se a correção entra na especificação |
 | [`iniciar-projeto`](skills/iniciar-projeto/SKILL.md) | Instala o `AGENTS.md` (a partir do [modelo padrão](skills/iniciar-projeto/assets/AGENTS.template.md)) e o `CLAUDE.md`, cria os documentos de referência vazios e confere o CLI do host, o Context7 e o Octocode |
-| [`especificar-feature`](skills/especificar-feature/SKILL.md) | Entrevista você e escreve a especificação da funcionalidade, com os cenários BDD sugeridos. Não implementa |
+| [`especificar-projeto`](skills/especificar-projeto/SKILL.md) | Conduz a especificação do projeto: monorepo ou parte de um projeto maior, PRD, TDD com stack definida ou proposta e revisão cruzada opcional. O `DESIGN.md` só entra se houver frontend. Pode preencher o `BDD.md` com requisitos de negócio para testes futuros. Não implementa |
+| [`especificar-feature`](skills/especificar-feature/SKILL.md) | Entrevista você e escreve a especificação da funcionalidade, com os cenários BDD sugeridos. Roda os testes no início; sem suíte, avisa e segue; se falharem, pergunta se a correção entra na especificação. Não implementa |
 | [`criar-testes`](skills/criar-testes/SKILL.md) | Cria os testes que faltam para os cenários de `bdd/` sem `@manual`, com o mesmo ID. Não altera cenário nem teste já existente |
-| [`revisar-codigo`](skills/revisar-codigo/SKILL.md) | Revisa o código (duplicação, SOLID, arquitetura, cobertura dos cenários) e sugere melhorias sem implementar |
-| [`atualizar-docs`](skills/atualizar-docs/SKILL.md) | Sincroniza `PRD.md`, `TDD.md` e `README.md` com o que foi implementado |
-| [`commitar`](skills/commitar/SKILL.md) | Roda os testes, commita por assunto, sobe a versão e envia a branch, com a opção de abrir o pull request. Sem tag nem release |
-| [`gerar-guardrails`](skills/gerar-guardrails/SKILL.md) | Gera o CI do pull request e a regra da branch que exige o CI verde (GitHub) |
-| [`publicar-release`](skills/publicar-release/SKILL.md) | Confere que não há pendências de commit, cria e envia a tag de release. Não commita |
+| [`revisar-codigo`](skills/revisar-codigo/SKILL.md) | Roda os testes no início, revisa o código (duplicação, SOLID, arquitetura, cobertura dos cenários) e sugere melhorias sem implementar. Sem suíte, avisa e segue |
+| [`atualizar-docs`](skills/atualizar-docs/SKILL.md) | Sincroniza `PRD.md`, `TDD.md` e `README.md` com o que foi implementado. No início, pergunta se no final commita ou publica a release |
+| [`commitar`](skills/commitar/SKILL.md) | Roda os testes no início, commita por assunto, sobe a versão e envia a branch, com a opção de abrir o pull request. Sem suíte, avisa e segue. Sem tag nem release |
+| [`gerar-guardrails`](skills/gerar-guardrails/SKILL.md) | Gera, uma vez, o CI do pull request e a regra da branch que exige o CI verde (GitHub). Sem suíte de testes, avisa e não gera |
+| [`publicar-release`](skills/publicar-release/SKILL.md) | Roda os testes no início, confere que não há pendências de commit, cria e envia a tag de release. Sem suíte, avisa e segue. Não commita |
 | [`gerar-skill`](skills/gerar-skill/SKILL.md) | Cria uma skill abstrata e reutilizável, independente do projeto e das tecnologias. Não implementa |
 
 As skills leem o `AGENTS.md` do projeto e os documentos de referência dele
@@ -38,22 +39,48 @@ produto ou stack fica aqui. O que o projeto não tem simplesmente não se aplica
 
 ## Fluxo de SDD
 
-Pedir para desenvolver ou implementar uma funcionalidade dispara
-[`implementar-sdd`](skills/implementar-sdd/SKILL.md). Ela lê cada skill da etapa e
-para nas aprovações. A ordem dela commita o código antes da documentação:
+Três fases. Preparar o projeto e gerar os guardrails acontecem uma vez.
+A funcionalidade pode ir inteira pela [`implementar-sdd`](skills/implementar-sdd/SKILL.md)
+ou skill por skill. O deploy não começa sozinho no fim da funcionalidade.
 
-```
-implementar-sdd: especificar-feature → plano → implementar → criar-testes
-               → revisar-codigo → commitar → atualizar-docs
-               → commitar a documentação | publicar-release
-```
+### Preparar o projeto
 
-O passo a passo abaixo continua valendo para rodar uma etapa sozinha. `iniciar-projeto` e `gerar-guardrails` ficam de fora do atalho: são feitos uma vez.
+Uma vez, no início, nesta ordem:
 
-```
-iniciar-projeto → especificar-feature → plano → implementar → criar-testes
-                → revisar-codigo → atualizar-docs → commitar → (gerar-guardrails) → publicar-release
-```
+1. **Instalar as skills** com o comando da seção Instalação.
+2. **`/iniciar-projeto`** na raiz. Cria `AGENTS.md`, `CLAUDE.md`, `HARNESS.md` e os documentos de referência vazios, e confere as ferramentas. Se isso já existir, não refaz.
+3. **`/especificar-projeto`**. Preenche `PRD.md`, `TDD.md` e, se houver frontend, `DESIGN.md`. Se PRD e TDD já tiverem conteúdo, não refaz sem você pedir.
+
+`/especificar-projeto` pergunta se o repositório é um monorepo ou um projeto dentro de um maior. No segundo caso, pede a especificação em alto nível ou os links dos repositórios e, com os links, monta o contexto pelo Octocode. A conversa segue nesta ordem:
+
+1. **PRD.** Objetivo principal e problema que o projeto resolve.
+2. **TDD.** Você define a stack ou pede uma proposta a partir do PRD.
+3. **Revisão.** Validar o cruzamento dos dois documentos, ou seguir. Na validação, a skill destaca as decisões técnicas que dependem de você.
+4. **DESIGN.md.** Só se houver frontend. Estilo ou referência, como um item do [getdesign.md](https://getdesign.md), coerente com o PRD e o TDD. Sem frontend, esta etapa não é sugerida.
+5. **BDD.** Pergunta se gera os requisitos de negócio no `BDD.md` e em `bdd/`, para testes futuros. Não escreve testes.
+6. **Plano.** Pergunta se você quer o plano no modo de planejamento do agente.
+
+### Adicionar uma funcionalidade
+
+Pedir para desenvolver ou implementar dispara [`implementar-sdd`](skills/implementar-sdd/SKILL.md). Ela especifica, planeja, implementa e então pergunta se você quer as etapas opcionais. Documentação e release ficam de fora.
+
+No início ela roda os testes. Sem suíte, avisa que o funcionamento não foi validado e segue. Se falharem, pergunta se a correção entra na especificação.
+
+| # | Etapa | Obrigatória | Como executar sozinho |
+|---|-------|-------------|------------------------|
+| 1 | **Especificar a funcionalidade** | sim | `/especificar-feature` |
+| — | Planejar e implementar | sim, dentro da `implementar-sdd` | O plano sai no fim da especificação; a implementação não é uma skill |
+| 2 | **Gerar os testes do BDD** | não | `/criar-testes` |
+| 3 | **Revisar o código** | não | `/revisar-codigo` |
+| 4 | **Commitar** | não | `/commitar` |
+
+### Deploy
+
+Não faz parte da funcionalidade. A ordem é:
+
+1. **`/gerar-guardrails`** (opcional, uma vez). Só se o projeto tiver testes. Sem suíte, avisa e não gera. Se o CI e a regra da branch já exigirem teste verde, não roda de novo.
+2. **`/atualizar-docs`**. Alinha `PRD.md`, `TDD.md` e `README.md` ao código.
+3. **Commitar ou publicar.** A `atualizar-docs` pergunta no início qual dos dois, ou nenhum. Publicar a release commita antes a documentação pendente e então segue `/publicar-release`.
 
 ### Como executar uma skill
 
@@ -63,28 +90,19 @@ escrever o pedido: "use a skill especificar-feature para a funcionalidade X".
 `implementar-sdd` também começa sozinha quando o pedido é desenvolver ou
 implementar uma funcionalidade.
 
-### Passo a passo
-
-| # | Etapa | Como executar | Resultado | Você aprova |
-|---|-------|---------------|-----------|-------------|
-| 0 | **Iniciar o projeto** (uma vez) | `/iniciar-projeto` na raiz do repositório | `AGENTS.md`, `CLAUDE.md`, `HARNESS.md`, `PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e `bdd/` criados (vazios, se não existiam); GitHub CLI, Context7 e Octocode conferidos | A substituição de um `AGENTS.md` existente, a instalação de ferramentas |
-| 1 | **Especificar** | `/especificar-feature <o que você quer>` | Especificação: objetivo, escopo, requisitos, regras, decisões e **cenários BDD sugeridos** | As decisões críticas e a gravação dos cenários em `bdd/` |
-| 2 | **Planejar** | Peça o plano ao fim da skill; o agente entra no **modo de planejamento** dele (não é uma skill) | Plano de implementação a partir da especificação | O plano |
-| 3 | **Implementar** | Peça ao agente para implementar o plano aprovado | Código e **um teste por cenário** de `bdd/`, com o mesmo ID. Os cenários `@manual` viram checklist | — |
-| 4 | **Criar os testes que faltam** | `/criar-testes` | Um teste novo por cenário de `bdd/` ainda sem teste. Os `@manual` continuam checklist | A lista de testes antes de gravar |
-| 5 | **Revisar** | `/revisar-codigo` (indique o escopo: arquivo, pasta ou "o que mudou") | Relatório por criticidade, incluindo cenários sem teste. Não edita nada | Quais sugestões aplicar |
-| 6 | **Atualizar a documentação** | `/atualizar-docs` | `PRD.md`, `TDD.md` e `README.md` alinhados ao código; cenários sem cobertura aparecem em "Pendências" | O texto alterado |
-| 7 | **Commitar** | `/commitar` | Testes rodando, commits por assunto, versão subida em um commit próprio, branch enviada e, se quiser, PR aberto | O plano de commits |
-| 8 | **Proteger a branch** (uma vez) | `/gerar-guardrails` | CI de pull request, portão de testes na release e regra que bloqueia o merge sem o CI verde | O plano e a criação da regra |
-| 9 | **Publicar** | `/publicar-release` | Tag `vX.Y.Z` criada e enviada, que dispara o pipeline de release. Só roda com o working tree limpo; havendo pendência, manda rodar o `/commitar` | O plano da release e o checklist dos cenários `@manual` |
-
 ### Regras do fluxo
 
+- **Preparação uma vez.** Instalar as skills, `iniciar-projeto` e
+  `especificar-projeto` não se repetem. `gerar-guardrails` também é uma vez,
+  e só com suíte de testes.
 - **Especificação primeiro.** Nenhuma funcionalidade vai ao código sem
   especificação e plano aprovados.
 - **Um teste por cenário.** Todo cenário de `bdd/` sem `@manual` tem um teste
-  com o mesmo ID. O `criar-testes` escreve os que faltam; o `revisar-codigo`
-  aponta o que ainda falhar.
+  com o mesmo ID quando você pede o `criar-testes`. O `revisar-codigo` aponta
+  o que ainda falhar. Sem suíte, as skills que rodam testes no início avisam
+  que o funcionamento não foi validado e continuam. Em `especificar-feature` e
+  `implementar-sdd`, teste falhando pergunta se a correção entra na
+  especificação atual.
 - **O cenário não muda para o teste passar.** Alterar o comportamento esperado
   exige a sua aprovação.
 - **Versão da release como fonte da verdade.** O `commitar` sobe a versão; o
@@ -115,15 +133,3 @@ Na raiz do projeto (acrescente `-g` para a instalação global):
 ```bash
 npx skills update -y
 ```
-
-### Migração dos nomes antigos
-
-Quatro skills mudaram de nome. Em projetos que já as instalaram, reinstale com o
-comando de instalação acima e apague as pastas antigas.
-
-| Nome antigo | Nome novo |
-|-------------|-----------|
-| `configurar-agentes` | `iniciar-projeto` |
-| `revisao-codigo` | `revisar-codigo` |
-| `atualizar-documentacao` | `atualizar-docs` |
-| `gerar-release` | `publicar-release` (só cria a tag; o commit por assunto e a versão ficam no `commitar`) |

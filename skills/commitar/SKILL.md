@@ -4,7 +4,8 @@ description: >-
   Commita todas as mudanças pendentes em commits separados por assunto e
   funcionalidade, sobe a versão do software em um commit próprio e envia a
   branch ao remoto, sem criar tag nem publicar release. Ao final, oferece atualizar a documentação do projeto e
-  abrir o pull request. Use
+  abrir o pull request. No início, roda os testes. Sem suíte, avisa que não
+  foi possível validar o funcionamento e segue. Use
   quando o usuário pedir para commitar, fazer commit, organizar commits ou
   commitar tudo agrupado por assunto, sem gerar release.
 ---
@@ -48,6 +49,15 @@ Progresso:
 
 ### 2. Pré-checagens
 
+A primeira ação é rodar os testes. Descubra o comando (CI, Makefile, manifesto
+ou script) e execute-o.
+
+- Suíte passando: siga.
+- Suíte falhando: mostre os erros e pare. Não commite com teste quebrado.
+- Projeto sem testes (nenhum comando, nenhum arquivo de teste, ou o runner
+  não coletou nenhum): alerte que o projeto não possui testes e que não foi
+  possível validar o funcionamento. Não pare por isso.
+
 ```bash
 git fetch origin
 git status -sb                     # não pode estar atrás do remoto
@@ -55,9 +65,8 @@ git status -sb                     # não pode estar atrás do remoto
 
 - Atrás do remoto, com merge/rebase em andamento ou conflito: pare e informe a
   ação corretiva. Não faça `pull`, `rebase` nem `reset` por conta própria.
-- Rode localmente as checagens descobertas (lint, tipos) e os testes do projeto
-  (ex.: `pytest`). Se falharem, mostre os erros e pare — não commite com
-  checagem ou teste quebrado. "Nenhum teste coletado" não é falha.
+- Rode localmente as checagens descobertas (lint, tipos). Se falharem, mostre
+  os erros e pare — não commite com checagem quebrada.
 - Se o projeto tem `BDD.md` (índice) com a pasta `bdd/` e um verificador de
   cobertura (procure em scripts, Makefile, manifesto ou CI), rode-o: ID inexistente é erro e para;
   cenário sem teste é aviso e entra no relatório.

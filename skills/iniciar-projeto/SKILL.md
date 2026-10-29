@@ -12,7 +12,11 @@ description: >-
 
 # Iniciar Projeto
 
-Inicia o projeto instalando as instruções de agente padronizadas. Explicações ao usuário
+Inicia o projeto instalando as instruções de agente padronizadas. Roda **uma
+vez**, depois que as skills já estiverem instaladas no projeto e antes de
+`especificar-projeto`. Se o `AGENTS.md` já for o modelo e os documentos de
+referência já existirem, diga que o projeto já foi iniciado e não refaça.
+Explicações ao usuário
 em **português (Brasil)**. Edita **apenas** `AGENTS.md`, `CLAUDE.md` e `HARNESS.md` e cria, se faltarem, os
 documentos de referência (`PRD.md`, `TDD.md`, `DESIGN.md`, `BDD.md` e a pasta
 `bdd/`), todos
