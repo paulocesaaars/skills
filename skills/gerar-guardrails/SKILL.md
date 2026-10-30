@@ -13,7 +13,7 @@ description: >-
 
 # Gerar Guardrails
 
-Cria a proteção que vale **no servidor**, onde ninguém contorna: um CI que roda em
+Cria proteção **no servidor**, sujeita às permissões e exceções configuradas: um CI que roda em
 todo pull request para a branch principal e uma regra do GitHub que só deixa o
 merge acontecer com o CI verde. Explicações ao usuário em **português (Brasil)**.
 
@@ -68,7 +68,7 @@ Progresso:
 | Sistemas operacionais | Onde o produto roda (instaladores, caminhos, binários por plataforma). Se roda em mais de um, pergunte se o CI deve testar neles |
 | Workflow de release | Arquivo em `.github/workflows/` disparado por `push` de tags |
 
-**Sem testes, não há guardrail.** Antes do resto, procure comando de teste
+**Pré-requisito desta skill: uma suíte de testes existente.** Antes do resto, procure comando de teste
 (CI, Makefile, manifesto ou script) e arquivo de teste. Se não houver nenhum,
 alerte que o projeto não possui testes, que não foi possível validar o
 funcionamento e que esta skill depende de uma suíte. Encerre. Não gere
@@ -165,8 +165,8 @@ jobs:
 ```
 
 - Remova os passos que o projeto não tem (sem tipos, sem checagem extra).
-- **Testes sem nenhum teste coletado** (ex.: `pytest` devolve 5) não podem
-  falhar o job: use `{{TESTES}} || [ $? -eq 5 ]` ou o equivalente da stack.
+- **Nenhum teste coletado** deve falhar o job: não mascare o código de saída
+  do runner. Só aceite exceção explícita do usuário e documente a limitação.
 - **Vários sistemas:** troque `runs-on` por `strategy.matrix.os` e mantenha o
   `name: ci` no job; a regra passa a exigir `ci (<sistema>)` para cada um. Ajuste
   o nome exigido no passo 7.
@@ -175,7 +175,9 @@ jobs:
 
 ### 5. Ligar o portão de testes à release
 
-A release só pode publicar com os testes verdes. Prefira **uma definição só**:
+Se houver workflow de release e o usuário quiser protegê-lo, exija testes
+verdes antes de publicar. Sem workflow, pule esta etapa; não crie release.
+Prefira **uma definição só**:
 reaproveitar o `ci.yml` pelo `workflow_call`.
 
 No workflow de release, acrescente um job e faça o build depender dele:
@@ -201,7 +203,7 @@ Uma regra que exige um check que **nunca rodou** deixa todo pull request travado
 em "Expected — Waiting for status". Por isso, a ordem é:
 
 1. Os workflows entram na branch principal por um pull request normal (a skill
-   `commitar` cuida do commit e do push; esta skill não commita nem faz push).
+   `versionar` cuida do commit e do push; esta skill não commita nem faz push).
 2. O `ci` roda ao menos uma vez e fica verde.
 3. **Só então** crie a regra (passo 7).
 

@@ -33,7 +33,8 @@ Foque o escopo no que o usuário indicar (arquivo, pasta, diff ou "o que mudou")
 Se nada for indicado, pergunte ou priorize o último conjunto de mudanças
 (`git diff`, arquivos recém-editados).
 
-Analise sempre estes eixos:
+Analise estes eixos considerando o contexto. Padrões SOLID são orientações,
+não regras mecânicas: só registre um achado quando houver impacto concreto.
 
 1. **Código duplicado / repetido**
    - A mesma capacidade implementada de novo para outra interface, em vez do
@@ -75,8 +76,8 @@ Analise sempre estes eixos:
    - Tipos nas funções públicas (em linguagem tipada); mensagens de erro com
      ação corretiva.
 
-5. **Cobertura do BDD** (só se o projeto usa BDD: existe `BDD.md`)
-   - Todo cenário de `bdd/` (índice em `BDD.md`) sem `@manual` tem um teste com o mesmo ID
+5. **Cobertura do BDD** (só com índice preenchido e cenários em `bdd/`)
+   - Todo cenário automatizável de `bdd/` tem rastreabilidade para testes pelo seu ID
      (a marcação do projeto, por exemplo `@pytest.mark.bdd("US-03.2")`). Use
      o verificador do projeto, se houver (procure em scripts, Makefile,
      manifesto ou CI).

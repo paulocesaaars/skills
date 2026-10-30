@@ -8,7 +8,7 @@ description: >-
   especificar, detalhar, escrever a spec, levantar requisitos ou desenhar uma
   funcionalidade nova. No início, roda os testes: sem suíte, avisa e segue;
   se falharem, pergunta se a correção entra na especificação atual. Também
-  pergunta se o usuário quer commitar no final com a skill commitar.
+  pergunta se o usuário quer commitar no final com a skill versionar.
 ---
 
 # Especificar Funcionalidade
@@ -71,7 +71,7 @@ novo. Use o resultado que ele registrou.
 
 Pergunte:
 
-- **Commitar no final** com a skill `commitar`
+- **Commitar no final** com a skill `versionar`
 - **Não commitar**
 
 Guarde a resposta. Não commite no meio do fluxo.
@@ -126,7 +126,7 @@ Monte a especificação com o modelo abaixo. Ao encontrar um ponto crítico ou
 importante sem resposta, pare e pergunte. Apresente as alternativas com
 impactos e uma recomendação. Registre cada decisão na seção **Decisões**.
 
-Se o projeto usa BDD (existe `BDD.md`), especifique também os **cenários BDD**: leia o índice `BDD.md` e os
+Se o projeto usa BDD (`BDD.md` está preenchido com índice de cenários), especifique também os **cenários BDD**: leia o índice `BDD.md` e os
 arquivos de `bdd/` que a funcionalidade toca, e sugira, em Gherkin português, os cenários novos e os que mudam por causa da
 funcionalidade. Cada cenário novo recebe o próximo ID livre da história
 (por exemplo `@US-03.4`), no arquivo daquele caso de uso, ou de uma história nova (arquivo novo
@@ -165,7 +165,7 @@ partir da especificação.
 
 ### 8. Commitar, se o usuário pediu
 
-Só se a resposta da etapa 1 foi commitar. Localize a skill `commitar` pelo
+Só se a resposta da etapa 1 foi commitar. Localize a skill `versionar` pelo
 nome nas pastas do repositório (`.claude/skills`, `.agents/skills`) e, se
 faltar, nas globais. Leia o `SKILL.md` e siga-o. Não reinterprete as regras
 dela.

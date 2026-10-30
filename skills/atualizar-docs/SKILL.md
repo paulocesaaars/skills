@@ -12,7 +12,7 @@ description: >-
 
 Mantém `PRD.md`, `TDD.md` e `README.md` fiéis ao código. Edita **apenas** esses
 três arquivos e o marcador `last-reviewed-commit` — nunca código, testes ou
-configuração. A etapa 8 é a exceção: se o usuário pediu, segue `commitar`
+configuração. A etapa 8 é a exceção: se o usuário pediu, segue `versionar`
 ou `publicar-release`. Todo o texto escrito é em **português (Brasil)**.
 
 Se o repositório usar outros nomes para os documentos de produto, técnico e de
@@ -49,9 +49,9 @@ Progresso:
 ### 0. Perguntar se commita ou publica no final
 
 Antes de qualquer outra ação, pergunte o que fazer depois da documentação.
-Esta skill faz parte do deploy, depois dos guardrails quando eles existirem:
+Esta skill pode preparar a documentação para uma publicação, independente de guardrails:
 
-- **Commitar no final** com a skill `commitar`
+- **Commitar no final** com a skill `versionar`
 - **Publicar a release no final** com a skill `publicar-release`
 - **Não commitar nem publicar**
 
@@ -77,8 +77,11 @@ BASE=$(cat "$MARK" 2>/dev/null)
 if [ -z "$BASE" ] || ! git merge-base --is-ancestor "$BASE" HEAD 2>/dev/null; then
   BASE=$(git log -1 --format=%H -- PRD.md TDD.md README.md)
 fi
-git log --oneline "$BASE"..HEAD
+if [ -n "$BASE" ]; then git log --oneline "$BASE"..HEAD; fi
 ```
+
+Se nenhuma base for encontrada, faça uma revisão inicial completa do estado
+atual dos arquivos e documentos; não use um intervalo Git com base vazia.
 
 Se `BASE` for igual a `HEAD` e não houver mudanças não commitadas fora dos
 documentos, informe que a documentação já está em dia e encerre.
@@ -89,8 +92,8 @@ documentos, informe que a documentação já está em dia e encerre.
 ### 2. Levantar o que mudou
 
 ```bash
-git diff --stat "$BASE"..HEAD -- . ':!*.md'
-git diff "$BASE"..HEAD -- . ':!*.md'
+[ -n "$BASE" ] && git diff --stat "$BASE"..HEAD -- . ':!*.md'
+[ -n "$BASE" ] && git diff "$BASE"..HEAD -- . ':!*.md'
 git status --porcelain
 ```
 
@@ -102,6 +105,9 @@ git status --porcelain
 - Confira a versão no manifesto do projeto (`pyproject.toml`, `package.json`,
   `*.csproj`, `Cargo.toml` ou equivalente) e as tags
   (`git tag --sort=-v:refname`).
+
+Sem base, inspecione os arquivos atuais e compare-os integralmente com os
+documentos; não execute os comandos de diff acima com `BASE` vazia.
 
 Classifique cada mudança relevante:
 
@@ -131,7 +137,7 @@ afetado com `rg` ou `git grep`. Pontos que costumam ficar defasados:
 Valide também o inverso: algo documentado que **não existe mais** no código deve
 ser removido ou corrigido.
 
-Se o projeto usa BDD (`BDD.md` e `bdd/`), não copie critérios de aceite para os
+Se o projeto usa BDD (`BDD.md` preenchido e cenários em `bdd/`), não copie critérios de aceite para os
 documentos. Se uma mudança altera comportamento sem cenário correspondente,
 registre em **Pendências** e sugira o cenário; não grave em `bdd/`.
 
@@ -157,7 +163,9 @@ registre em **Pendências** e sugira o cenário; não grave em `bdd/`.
 
 ### 6. Gravar a base revisada
 
-Grave o `HEAD` atual no marcador, sobrescrevendo o valor anterior:
+Se houver divergência ou decisão pendente que impeça concluir a revisão,
+não avance o marcador: relate os pontos pendentes. Só após resolver as
+pendências, grave o `HEAD` atual, sobrescrevendo o valor anterior:
 
 ```bash
 mkdir -p .agents
@@ -193,12 +201,12 @@ Localize a skill pelo nome nas pastas do repositório (`.claude/skills`,
 `.agents/skills`) e, se faltar, nas globais. Leia o `SKILL.md` e siga-o.
 Não reinterprete as regras dela.
 
-**Commitar.** Siga `commitar`. Pule o passo em que ela oferece atualizar a
+**Commitar.** Siga `versionar`. Pule o passo em que ela oferece atualizar a
 documentação: ela acabou de ser feita. Siga o restante, inclusive a oferta
 de pull request.
 
 **Publicar a release.** A release só sai com a árvore limpa. Se esta skill
-alterou arquivos, commite só esses arquivos pelos passos 3 a 8 de `commitar`,
+alterou arquivos, commite só esses arquivos pelos passos 3 a 8 de `versionar`,
 sem subir a versão de novo e sem oferecer de novo a documentação. Depois siga
 `publicar-release` por inteiro.
 

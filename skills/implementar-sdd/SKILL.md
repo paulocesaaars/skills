@@ -3,7 +3,7 @@ name: implementar-sdd
 description: >-
   Conduz uma funcionalidade: especifica, planeja, implementa e então pergunta
   se gera os testes do BDD, se revisa o código e se commita. Não atualiza a
-  documentação nem publica a release; isso é o deploy. No início, roda os
+  documentação nem publica a release; isso é um fluxo separado. No início, roda os
   testes: sem suíte, avisa e segue; se falharem, pergunta se a correção entra
   na especificação atual. Use quando o usuário pedir para desenvolver,
   implementar ou construir uma funcionalidade, feature ou fluxo de
@@ -15,7 +15,7 @@ description: >-
 
 Conduz uma funcionalidade da especificação até o código. Testes do BDD, revisão
 e commit são opcionais e vêm depois da implementação. Documentação, guardrails
-e release ficam no deploy, fora desta skill. Explicações ao usuário em
+e release ficam em um fluxo separado, fora desta skill. Explicações ao usuário em
 **português (Brasil)**.
 
 Cada etapa é uma skill que já existe. Leia o `SKILL.md` dela e siga-o. Não
@@ -28,7 +28,7 @@ Comece quando o usuário pedir para desenvolver, implementar ou construir uma
 funcionalidade.
 
 Não comece em dúvida, exploração, opinião ou pedido de uma etapa só
-(`especificar-feature`, `criar-testes`, `revisar-codigo`, `commitar`,
+(`especificar-feature`, `criar-testes`, `revisar-codigo`, `versionar`,
 `atualizar-docs`, `publicar-release`). Nesses casos, siga só a skill pedida.
 
 Se o usuário entregar a especificação pronta ou pedir para retomar de uma
@@ -38,7 +38,7 @@ etapa, comece nela. Não refaça etapa já concluída nesta conversa.
 
 - Siga o `AGENTS.md`. Em conflito, vale o `HARNESS.md`, se existir.
 - Uma etapa termina antes da próxima. Não antecipe commit, documentação,
-  guardrails nem release. O deploy é outro pedido.
+  guardrails nem release. A publicação é outro pedido.
 - O plano aprovado autoriza só o que está nele. Fora isso, peça confirmação.
 - Localize cada skill pelo nome nas pastas do repositório (`.claude/skills`,
   `.agents/skills`) e, se faltar, nas skills globais. Leia um
@@ -108,8 +108,9 @@ codar.
 
 ### 4. Gerar os testes do BDD
 
-Pergunte se o usuário quer gerar os testes que faltam para os cenários de
-`bdd/`.
+Se `BDD.md` estiver preenchido e houver cenários em `bdd/`, sugira gerar
+os testes que faltam e pergunte se o usuário quer gerá-los. Se estiverem
+vazios ou ausentes, informe que não há cenários e siga para a etapa 5.
 
 - **Gerar os testes**
 - **Pular**
@@ -152,7 +153,9 @@ visíveis se a etapa 6 for confirmada.
 
 ### 6. Commitar
 
-Pergunte se o usuário quer commitar.
+Pergunte se o usuário quer preparar commits por assunto, subir a versão e
+enviar a branch. Se ele pedir apenas commit, não suba a versão nem envie
+sem autorização específica.
 
 - **Commitar**
 - **Pular**
@@ -160,18 +163,18 @@ Pergunte se o usuário quer commitar.
 **Pular.** Encerre. Não atualize documentação, não gere guardrails e não
 publique release.
 
-**Commitar.** Siga `commitar` nos passos 1 a 8: checagens, commits por
+**Commitar.** Siga `versionar` nos passos 1 a 8: checagens, commits por
 assunto, subida de versão e envio da branch. A confirmação do plano de
 commits continua valendo.
 
 Pule os passos 9 e 10. Não ofereça atualizar a documentação nem abrir pull
-request: documentação e release são o deploy, outro pedido.
+request: documentação e release são outro pedido.
 
 Checagem ou teste falhou: pare.
 
-Ao terminar, não comece o deploy. Se o usuário pedir, a ordem é
+Ao terminar, não comece a publicação. Se o usuário pedir, a ordem é
 `gerar-guardrails` (uma vez, e só se o projeto tiver testes), `atualizar-docs`
-e, no fim, `commitar` ou `publicar-release`.
+e, no fim, `versionar` ou `publicar-release`.
 
 ## Em caso de falha
 
