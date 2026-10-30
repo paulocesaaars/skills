@@ -11,11 +11,12 @@ Juntas, elas cobrem o fluxo de **desenvolvimento orientado a especificação
 |-------|-----|
 | [`implementar-sdd`](skills/implementar-sdd/SKILL.md) | Especifica, planeja e implementa uma funcionalidade. Depois pergunta se gera os testes do BDD, se revisa e se commita. Não publica a versão. No início, roda os testes; sem suíte, avisa e segue; se falharem, pergunta se a correção entra na especificação |
 | [`iniciar-projeto`](skills/iniciar-projeto/SKILL.md) | Instala o `AGENTS.md` (a partir do [modelo padrão](skills/iniciar-projeto/assets/AGENTS.template.md)) e o `CLAUDE.md`, cria os documentos de referência vazios e confere o CLI do host, o Context7 e o Octocode |
-| [`especificar-projeto`](skills/especificar-projeto/SKILL.md) | Conduz a especificação do projeto: monorepo ou parte de um projeto maior, PRD, TDD com stack definida ou proposta e revisão cruzada opcional. O `DESIGN.md` só entra se houver frontend. Pode preencher o `BDD.md` com requisitos de negócio para testes futuros. Não implementa |
+| [`atualizar-projeto`](skills/atualizar-projeto/SKILL.md) | Traz o `AGENTS.md` ao modelo mais novo de `iniciar-projeto` depois que as skills são atualizadas. Não refaz a iniciação |
+| [`especificar-projeto`](skills/especificar-projeto/SKILL.md) | Conduz a especificação do projeto em greenfield e brownfield: monorepo ou parte de um projeto maior, PRD, TDD (stack definida, proposta ou a já presente no código) e revisão cruzada opcional. O `DESIGN.md` só entra se houver frontend. Pode preencher o `BDD.md` com requisitos de negócio para testes futuros. Não implementa |
 | [`especificar-feature`](skills/especificar-feature/SKILL.md) | Entrevista você e escreve a especificação da funcionalidade, com os cenários BDD sugeridos. Roda os testes no início; sem suíte, avisa e segue; se falharem, pergunta se a correção entra na especificação. Não implementa |
 | [`criar-testes`](skills/criar-testes/SKILL.md) | Cria, quando solicitado, testes para cenários preenchidos de `bdd/` sem `@manual`, preservando a rastreabilidade por ID. Não altera cenário nem teste já existente |
 | [`revisar-codigo`](skills/revisar-codigo/SKILL.md) | Roda os testes no início, revisa o código (duplicação, SOLID, arquitetura, cobertura dos cenários) e sugere melhorias sem implementar. Sem suíte, avisa e segue |
-| [`atualizar-docs`](skills/atualizar-docs/SKILL.md) | Sincroniza `PRD.md`, `TDD.md` e `README.md` com o que foi implementado. No início, pergunta se no final commita ou publica a release |
+| [`atualizar-docs`](skills/atualizar-docs/SKILL.md) | Deixa `PRD.md`, `TDD.md` e `README.md` como a foto atual do código. PRD e TDD não versionam nem guardam histórico do que já foi. No início, pergunta se no final commita ou publica a release |
 | [`versionar`](skills/versionar/SKILL.md) | Roda os testes no início, commita por assunto, sobe a versão e envia a branch, com a opção de abrir o pull request. Sem suíte, avisa e segue. Sem tag nem release |
 | [`gerar-guardrails`](skills/gerar-guardrails/SKILL.md) | Gera, uma vez, o CI do pull request e a regra da branch que exige o CI verde (GitHub). Sem suíte de testes, avisa e não gera |
 | [`publicar-release`](skills/publicar-release/SKILL.md) | Roda os testes no início, confere que não há pendências de commit, cria e envia a tag de release. Sem suíte, avisa e segue. Não commita |
@@ -57,14 +58,14 @@ Uma vez, no início, nesta ordem:
 
 1. **Instalar as skills** com o comando da seção Instalação.
 2. **`/iniciar-projeto`** na raiz. Cria `AGENTS.md`, `CLAUDE.md`, `HARNESS.md` e os documentos de referência vazios, e confere as ferramentas. Se isso já existir, não refaz.
-3. **`/especificar-projeto`**. Preenche `PRD.md`, `TDD.md` e, se houver frontend, `DESIGN.md`. Se PRD e TDD já tiverem conteúdo, não refaz sem você pedir.
+3. **`/especificar-projeto`**. Preenche `PRD.md`, `TDD.md` e, se houver frontend, `DESIGN.md`. Serve para projeto novo (greenfield) e para projeto que já tem código (brownfield). Se PRD e TDD já tiverem conteúdo, não refaz sem você pedir.
 
-`/especificar-projeto` pergunta se o repositório é um monorepo ou um projeto dentro de um maior. No segundo caso, pede a especificação em alto nível ou os links dos repositórios e, com os links, monta o contexto pelo Octocode. A conversa segue nesta ordem:
+`/especificar-projeto` olha a árvore do repositório e classifica o terreno. Em greenfield, a especificação nasce da conversa. Em brownfield, lê o código antes de perguntar e descreve o produto e a stack que já existem, sem propor outra. Também pergunta se o repositório é um monorepo ou um projeto dentro de um maior, a menos que a árvore já responda. No segundo caso, pede a especificação em alto nível ou os links dos repositórios e, com os links, monta o contexto pelo Octocode. A conversa segue nesta ordem:
 
-1. **PRD.** Objetivo principal e problema que o projeto resolve.
-2. **TDD.** Você define a stack ou pede uma proposta a partir do PRD.
+1. **PRD.** Em greenfield, objetivo principal e problema que o projeto resolve. Em brownfield, o rascunho sai do código e você confirma o que o código não prova.
+2. **TDD.** Em greenfield, você define a stack ou pede uma proposta a partir do PRD. Em brownfield, a stack é a do repositório.
 3. **Revisão.** Validar o cruzamento dos dois documentos, ou seguir. Na validação, a skill destaca as decisões técnicas que dependem de você.
-4. **DESIGN.md.** Só se houver frontend. Estilo ou referência, como um item do [getdesign.md](https://getdesign.md), coerente com o PRD e o TDD. Sem frontend, esta etapa não é sugerida.
+4. **DESIGN.md.** Só se houver frontend. Em greenfield, estilo ou referência, como um item do [getdesign.md](https://getdesign.md), coerente com o PRD e o TDD. Em brownfield, o estilo já presente no código. Sem frontend, esta etapa não é sugerida.
 5. **BDD.** Pergunta se gera os requisitos de negócio no `BDD.md` e em `bdd/`, para testes futuros. Não escreve testes.
 6. **Plano.** Pergunta se você quer o plano no modo de planejamento do agente.
 
@@ -87,7 +88,7 @@ No início ela roda os testes. Sem suíte, avisa que o funcionamento não foi va
 Não faz parte da funcionalidade. A ordem é:
 
 1. **`/gerar-guardrails`** (opcional, uma vez). Só se o projeto tiver testes. Sem suíte, avisa e não gera. Se o CI e a regra da branch já exigirem teste verde, não roda de novo.
-2. **`/atualizar-docs`**. Alinha `PRD.md`, `TDD.md` e `README.md` ao código.
+2. **`/atualizar-docs`**. Deixa `PRD.md` e `TDD.md` como a foto atual do projeto, sem versão nem histórico, e alinha o `README.md` ao uso atual.
 3. **Commitar ou publicar.** A `atualizar-docs` pergunta no início qual dos dois, ou nenhum. Publicar a release commita antes a documentação pendente e então segue `/publicar-release`.
 
 ### Como executar uma skill
@@ -139,3 +140,5 @@ Na raiz do projeto (acrescente `-g` para a instalação global):
 ```bash
 npx skills update -y
 ```
+
+Depois, no projeto que já foi iniciado, rode `/atualizar-projeto` para trazer o `AGENTS.md` ao modelo mais novo de `iniciar-projeto`.

@@ -1,11 +1,12 @@
 ---
 name: atualizar-docs
 description: >-
-  Atualiza PRD.md, TDD.md e README.md com tudo que foi implementado desde a
-  última revisão desses documentos, comparando o código atual com o que está
-  documentado. No início, pergunta se no final o usuário quer commitar ou
-  publicar a release. Use quando o usuário pedir para atualizar, sincronizar ou
-  revisar a documentação, o PRD, o TDD ou o README após mudanças no código.
+  Atualiza PRD.md, TDD.md e README.md para a foto atual do projeto, comparando
+  o código com o que está documentado. PRD e TDD não recebem versão nem guardam
+  histórico do que já foi. No início, pergunta se no final o usuário quer
+  commitar ou publicar a release. Use quando o usuário pedir para atualizar,
+  sincronizar ou revisar a documentação, o PRD, o TDD ou o README após mudanças
+  no código.
 ---
 
 # Atualizar Documentação
@@ -24,12 +25,27 @@ Cada fato mora em **um** documento; os outros apontam para ele.
 
 | Documento | Conteúdo | Não deve conter |
 |-----------|----------|-----------------|
-| `PRD.md` | O quê e por quê: requisitos (RF), histórias (os critérios de aceite ficam no `BDD.md` e em `bdd/`, quando o projeto usa BDD), regras de negócio, roadmap, riscos, fora de escopo | Nomes de módulos, detalhes de implementação |
-| `TDD.md` | Como: stack, componentes, estrutura de pastas, modelo de dados, pipelines, interfaces, configuração, segurança, desempenho, decisões | Justificativa de produto, passo a passo de uso |
-| `README.md` | Uso: instalação, primeiros passos, comandos, interfaces expostas, configuração, publicação | Arquitetura interna, requisitos formais |
+| `PRD.md` | O quê e por quê, no presente: requisitos (RF), histórias (os critérios de aceite ficam no `BDD.md` e em `bdd/`, quando o projeto usa BDD), regras de negócio, escopo, riscos, fora de escopo | Nomes de módulos, detalhes de implementação, versão do documento, changelog, lista do que já foi entregue |
+| `TDD.md` | Como, no presente: stack, componentes, estrutura de pastas, modelo de dados, pipelines, interfaces, configuração, segurança, desempenho, decisões vigentes | Justificativa de produto, passo a passo de uso, evolução, histórico de decisões |
+| `README.md` | Uso atual: instalação, primeiros passos, comandos, interfaces expostas, configuração, publicação | Arquitetura interna, requisitos formais, changelog |
 
-Os documentos descrevem o **estado atual**, não um changelog. Reescreva o trecho
-desatualizado em vez de acrescentar "agora também faz X".
+## Foto atual, sem histórico
+
+`PRD.md` e `TDD.md` são a foto do projeto **agora**. Quem abrir o arquivo entende
+o produto e o desenho técnico vigentes sem precisar saber o que já foi.
+
+- Escreva no presente: o que o projeto é, faz e como está montado.
+- Reescreva o trecho desatualizado. Não acrescente "agora também faz X", "a
+  partir da versão Y" nem uma nota do que mudou.
+- Não versione esses documentos: sem número de versão, data de revisão, status
+  de entrega nem cabeçalho que registre a rodada.
+- Não mantenha histórico do que já foi. Apague changelog, evolução, versões
+  anteriores, "entregue", "feito em" e qualquer roadmap que só arquive o
+  passado. O que deixou de existir sai do documento. O que continua vale como
+  fato atual, não como item concluído.
+- O que ainda não existe no código não entra como capacidade atual.
+
+O `README.md` descreve o uso atual, no mesmo espírito: sem changelog.
 
 ## Fluxo
 
@@ -102,9 +118,9 @@ git status --porcelain
   exclui.
 - Leia os arquivos novos ou muito alterados por inteiro; o diff sozinho não
   mostra o contrato público.
-- Confira a versão no manifesto do projeto (`pyproject.toml`, `package.json`,
-  `*.csproj`, `Cargo.toml` ou equivalente) e as tags
-  (`git tag --sort=-v:refname`).
+- A versão do software fica no manifesto (`pyproject.toml`, `package.json`,
+  `*.csproj`, `Cargo.toml` ou equivalente) e nas tags. Não copie essa versão,
+  nem a data da revisão, para o `PRD.md` ou o `TDD.md`.
 
 Sem base, inspecione os arquivos atuais e compare-os integralmente com os
 documentos; não execute os comandos de diff acima com `BASE` vazia.
@@ -124,13 +140,14 @@ Classifique cada mudança relevante:
 Para cada mudança, decida o documento dono (tabela acima) e procure o trecho
 afetado com `rg` ou `git grep`. Pontos que costumam ficar defasados:
 
-- **PRD.md**: cabeçalho (status, data, versão), tabela de requisitos (inclusive
-  prioridade e se já está entregue), histórias (critérios de aceite só se o
-  projeto não usa BDD), regras de negócio, roadmap (mover itens de "Próximo" para "Entregue"; contagens de
-  capacidades), riscos.
+- **PRD.md**: requisitos vigentes, histórias (critérios de aceite só se o
+  projeto não usa BDD), regras de negócio, escopo, riscos. Sem cabeçalho de
+  versão, data ou status de entrega. Não mova item para uma lista de
+  "Entregue": incorpore ao estado atual ou apague.
 - **TDD.md**: stack e versões de dependências, árvore da estrutura do projeto,
   componentes, modelo de dados, pipelines, interfaces, exemplos de
-  configuração, segurança, desempenho, decisões arquiteturais, evolução.
+  configuração, segurança, desempenho, decisões arquiteturais vigentes. Sem
+  seção de evolução ou de decisões que já não valem.
 - **README.md**: instalação, primeiros passos, comandos e flags, lista de
   capacidades expostas, configuração, publicação.
 
@@ -148,8 +165,10 @@ registre em **Pendências** e sugira o cenário; não grave em `bdd/`.
   implementado.
 - Mantenha estilo, tom, numeração (RF-NN, seções) e formatação de cada documento.
   Novos requisitos recebem o próximo número livre; não renumere os existentes.
-- Atualize a data do cabeçalho do `PRD.md` para hoje e o status se a versão
-  entregue mudou.
+  Requisito que não descreve mais o projeto sai por inteiro, sem anotação de
+  removido, entregue ou substituído.
+- Se o `PRD.md` ou o `TDD.md` tiverem versão, data de revisão, changelog, lista
+  de entregas ou evolução, remova isso na mesma edição e deixe só a foto atual.
 - Se uma mudança for ambígua ou contradizer o PRD (comportamento diferente do
   requisito), **não decida sozinho**: registre no relatório e pergunte se o
   código ou o documento está certo.
